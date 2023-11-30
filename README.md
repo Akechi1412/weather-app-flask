@@ -13,6 +13,7 @@ This is a simple weather app implemented in Python using the Flask web framework
 Make sure you have the following installed before running the app:
 
 - Python 3.6 or higher
+- API Key from [OpenWeather](https://home.openweathermap.org/api_keys)
 - Flask
 - [Other dependencies, if any]
 
@@ -25,7 +26,13 @@ Make sure you have the following installed before running the app:
    cd weather-app-flask
 ```
 
-2. Create and activate a virtual environment:
+2. Create a file named `local_settings.py` and copy the following code:
+
+```python
+  API_KEY = "Your API Key"
+```
+
+3. Create and activate a virtual environment:
 
 - For Window
 
@@ -41,19 +48,19 @@ Make sure you have the following installed before running the app:
   . .venv/bin/activate
 ```
 
-3. Install dependencies:
+4. Install dependencies:
 
 ```bash
   pip install -r requirements.txt
 ```
 
-4. Run the application.
+5. Run the application.
 
 ```bash
   python main.py
 ```
 
-5. Open your web browser and navigate to http://localhost:5000 to view the app.
+6. Open your web browser and navigate to http://localhost:5000 to view the app.
 
 Remember to deactivate the virtual environment after you're done:
 
