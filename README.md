@@ -50,7 +50,7 @@ Make sure you have the following installed before running the app:
 4. Run the application.
 
 ```bash
-  pip install -r requirements.txt
+  python main.py
 ```
 
 5. Open your web browser and navigate to http://localhost:5000 to view the app.
