@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Open Sans', sans-serif;
+      }
+      body {
+        background-color: #e3f2fd;
+        color: #222222;
+      }
+      .weather-timezone {
+        margin-left: 10px;
+        font-size: 1rem;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+      .error-text {
+        color: #ed4337;
+        margin-top: 20px;
+      }
+      h1 {
+        color: #ffffff;
+        padding: 18px 0;
+        text-align: center;
+        font-size: 1.75rem;
+        background: #5372f0;
+      }
+      .container {
+        display: flex;
+        gap: 35px;
+        padding: 30px;
+      }
+      .weather-router {
+        width: 550px;
+      }
+      .weather-router h3 {
+        font-size: 1.2rem;
+      }
+      .weather-input {
+        width: 100%;
+        height: 46px;
+        outline: none;
+        padding: 0 15px;
+        margin: 10px 0 20px 0;
+        font-size: 1.07rem;
+        border-radius: 4px;
+        border: 1px solid #cccccc;
+      }
+      .weather-router button {
+        width: 100%;
+        padding: 10px 0;
+        cursor: pointer;
+        font-size: 1rem;
+        outline: none;
+        border: 0;
+        color: #ffffff;
+        border-radius: 4px;
+        background-color: #5372f0;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+      .weather-router button:hover {
+        opacity: 0.85;
+      }
+      .weather-router .location-btn {
+        background-color: #6c757d;
+      }
+      .weather-router .separator {
+        height: 1px;
+        width: 100%;
+        margin: 25px 0;
+        background-color: #bbbbbb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .weather-router .separator::before {
+        content: 'hoặc';
+        color: #6c757d;
+        font-size: 1.18rem;
+        padding: 0 15px;
+        background-color: #e3f2fd;
+      }
+      .weather-data {
+        width: 100%;
+      }
+      .weather-current {
+        color: #ffffff;
+        padding: 20px;
+        background-color: #5372f0;
+        border-radius: 5px;
+        box-shadow: -2px 5px 10px rgba(0, 0, 0, 0.3);
+      }
+      .weather-current h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+      .weather-wrapper {
+        display: flex;
+        gap: 30px;
+        justify-content: space-around;
+      }
+      .weather-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .weather-state {
+        font-size: 0.875rem;
+        text-transform: capitalize;
+      }
+      .weather-icon {
+        width: 100%;
+        max-width: 120px;
+      }
+      .weather-temperature {
+        font-size: 3.75rem;
+        font-weight: lighter;
+        line-height: 1;
+        position: relative;
+        margin-bottom: 10px;
+      }
+
+      .weather-temperature::after {
+        content: 'o';
+        position: absolute;
+        font-size: 1.25rem;
+      }
+      .weather-detail .row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 10px;
+      }
+      .weather-detail .label {
+        padding: 5px 10px;
+        background-color: #4466ee;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .weather-detail .value {
+        padding: 5px;
+      }
+      .forecast {
+        margin: 20px 0;
+      }
+      .forecast h2 {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+      }
+      .forecast-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+      }
+      .forecast-item {
+        background-color: #6c757d;
+        color: #ffffff;
+        padding: 18px 16px;
+        border-radius: 5px;
+        box-shadow: -2px 3px 8px rgba(0, 0, 0, 0.2);
+      }
+      .forecast-date {
+        font-size: 1.125rem;
+        text-align: center;
+      }
+      .forecast-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .forecast-icon {
+        max-width: 100px;
+      }
+      .forecast-temperature {
+        font-size: 2rem;
+      }
+      .forecast-detail {
+        line-height: 1.25;
+      }
+      .forecast-detail > * {
+        padding: 10px 0;
+      }
+      @media screen and (max-width: 900px) {
+        .weather-current h2 {
+          font-size: 1.3rem;
+        }
+        .weather-wrapper {
+          flex-direction: row-reverse;
+        }
+        .weather-icon {
+          max-width: 100px;
+        }
+        .weather-temperature {
+          font-size: 2.5rem;
+          margin-bottom: 5px;
+        }
+        .weather-temperature::after {
+          font-size: 1rem;
+        }
+        .weather-detail .row {
+          gap: 10px;
+          margin-bottom: 5px;
+        }
+        .forecast h2 {
+          font-size: 1.4rem;
+        }
+      }
+      @media screen and (max-width: 750px) {
+        .weather-timezone {
+          font-size: 0.875rem;
+        }
+        .container {
+          flex-direction: column;
+          padding: 15px;
+        }
+        h1 {
+          font-size: 1.5rem;
+        }
+        .weather-router {
+          width: 100%;
+        }
+        .weather-router h3 {
+          font-size: 1rem;
+        }
+        .weather-input {
+          height: 40px;
+          font-size: 0.875rem;
+          padding: 0 10px;
+        }
+        .weather-router button {
+          font-size: 0.875rem;
+        }
+        .weather-router .separator::before {
+          font-size: 0.875rem;
+          padding: 0 10px;
+        }
+        .weather-current h2 {
+          font-size: 1.125rem;
+        }
+        .weather-wrapper {
+          gap: 20px;
+        }
+        .weather-info {
+          font-size: 0.8rem;
+        }
+        .weather-state {
+          font-size: 0.8rem;
+        }
+        .weather-detail .row {
+          font-size: 0.875rem;
+        }
+        .forecast {
+          font-size: 0.875rem;
+        }
+        .forecast h2 {
+          font-size: 1.25rem;
+        }
+        .forecast-date {
+          font-size: 1rem;
+        }
+        .forecast-detail {
+          text-align: center;
+        }
+      }
+    </style>
+    <title>Weather Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+  </head>
+  <body>
+    <h1>Weather Dashboard</h1>
+    <div class="container">
+      <div class="weather-router">
+        <form method="post" action="{{ url_for('getCityWeather') }}">
+          <h3>Nhập tên thành phố</h3>
+          <input
+            required
+            class="weather-input"
+            type="text"
+            name="city"
+            placeholder="VD: Ho Chi Minh, Ha Noi"
+            value="{{ request.form['city'] }}"
+          />
+          <button type="submit" class="search-btn">Tìm kiếm</button>
+        </form>
+        <div class="separator"></div>
+        <form method="post" action="{{ url_for('getCurrentLocationWeather') }}" id="locationForm">
+          <button type="submit" class="location-btn" onclick="getCurrentLocation()">
+            Sử dụng vị trí hiện tại
+          </button>
+        </form>
+        {% if status_code == 404 %}
+        <p class="error-text">Không tìm thấy thành phố hoặc vị trí này 😥</p>
+        {% elif status_code != 200 %}
+        <p class="error-text">Đã có lỗi gì đó xảy ra 😭</p>
+        {% endif %}
+      </div>
+      <div class="weather-data">
+        {% if current_data %}
+        <div class="weather-current">
+          {% macro timezone_to_gmt_offset(timezone) %} {%- set sign = '+' if timezone >= 0 else '-'
+          -%} {%- set absolute_timezone = timezone | abs -%} {%- set hours, remainder =
+          absolute_timezone // 3600, absolute_timezone % 3600 -%} {%- set minutes = remainder // 60
+          -%} {{ sign }}{{ "%02d:%02d" | format(hours, minutes) }} {% endmacro %}
+          <h2>
+            {{ current_data['name'] }} ({{ current_data['formated_date'] }})
+            <span class="weather-timezone"
+              >GMT {{ timezone_to_gmt_offset(current_data['timezone']) }}</span
+            >
+          </h2>
+          <div class="weather-wrapper">
+            <div class="weather-detail">
+              <div class="row">
+                <p class="label">Độ ẩm</p>
+                <p class="value">{{ current_data['main']['humidity'] }} %</p>
+              </div>
+              <div class="row">
+                <p class="label">Gió</p>
+                <p class="value">{{ "%.2f"|format(current_data['wind']['speed'] * 3.6) }} km/h</p>
+              </div>
+              <div class="row">
+                <p class="label">Mây</p>
+                <p class="value">{{ current_data['clouds']['all'] }} %</p>
+              </div>
+              <div class="row">
+                <p class="label">Tầm nhìn xa</p>
+                <p class="value">{{ (current_data['visibility'] / 1000) | int }} km</p>
+              </div>
+              <div class="row">
+                <p class="label">Bình minh</p>
+                <p class="value">{{ current_data['sunrise'] }}</p>
+              </div>
+              <div class="row">
+                <p class="label">Hoàng hôn</p>
+                <p class="value">{{ current_data['sunset'] }}</p>
+              </div>
+            </div>
+            <div class="weather-info">
+              <p class="weather-state">{{ current_data['weather'][0]['description'] }}</p>
+              <img
+                src="https://openweathermap.org/img/wn/{{ current_data['weather'][0]['icon'] }}@2x.png"
+                alt="Weather Icon"
+                class="weather-icon"
+              />
+              <p class="weather-temperature">{{ current_data['main']['temp'] | int }}</p>
+              <p>Cảm giác như {{ current_data['main']['feels_like'] | int }}°</p>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="weather-current">
+          <h2>-- (--)</h2>
+          <div class="weather-wrapper">
+            <div class="weather-detail">
+              <div class="row">
+                <p class="label">Độ ẩm</p>
+                <p class="value">-- %</p>
+              </div>
+              <div class="row">
+                <p class="label">Gió</p>
+                <p class="value">-- km/h</p>
+              </div>
+              <div class="row">
+                <p class="label">Mây</p>
+                <p class="value">-- %</p>
+              </div>
+              <div class="row">
+                <p class="label">Tầm nhìn xa</p>
+                <p class="value">-- km</p>
+              </div>
+              <div class="row">
+                <p class="label">Bình minh</p>
+                <p class="value">--:--</p>
+              </div>
+              <div class="row">
+                <p class="label">Hoàng hôn</p>
+                <p class="value">--:--</p>
+              </div>
+            </div>
+            <div class="weather-info">
+              <p class="weather-state">--</p>
+              <img
+                src="https://openweathermap.org/img/wn/01d@2x.png"
+                alt="Weather Icon"
+                class="weather-icon"
+              />
+              <p class="weather-temperature">--</p>
+              <p>Cảm giác như --°</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="forecast">
+          <h2>Dự báo</h2>
+          {% if forecast_data %}
+          <div class="forecast-list">
+            {% for forecast_item in forecast_data %}
+            <div class="forecast-item">
+              <h5 class="forecast-date">{{ forecast_item['formated_date'] }}</h5>
+              <div class="forecast-info">
+                <img
+                  src="https://openweathermap.org/img/wn/{{ forecast_item['weather'][0]['icon'] }}@2x.png"
+                  alt="Forecast Icon"
+                  class="forecast-icon"
+                />
+                <p class="forecast-temperature">{{ forecast_item['main']['temp'] | int }}°</p>
+              </div>
+              <div class="forecast-detail">
+                <p>Độ ẩm: {{ forecast_item['main']['humidity'] }} %</p>
+                <p>Gió: {{ "%.2f"|format(current_data['wind']['speed'] * 3.6) }} km/h</p>
+                <p>Mây: {{ current_data['clouds']['all'] }} %</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p>Chưa có dữ liệu để hiển thị 😐</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const locationBtn = document.querySelector('.location-btn');
+    const locationForm = document.querySelector('#locationForm');
+    if (locationBtn) {
+      locationBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition((position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          const latitudeInput = document.createElement('input');
+          latitudeInput.type = 'hidden';
+          latitudeInput.name = 'latitude';
+          latitudeInput.value = latitude;
+
+          const longitudeInput = document.createElement('input');
+          longitudeInput.type = 'hidden';
+          longitudeInput.name = 'longitude';
+          longitudeInput.value = longitude;
+
+          locationForm.appendChild(latitudeInput);
+          locationForm.appendChild(longitudeInput);
+          locationForm.submit();
+        });
+      });
+    }
+  </script>
+</html>

@@ -1,0 +1,8 @@
+# Test file
+test.py
+
+# Local Settings
+local_settings.py
+
+# Virtual Environment
+.venv
